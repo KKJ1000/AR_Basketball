@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 165b1b4c26d5912429308e80ec154977
   - enabled: 1
-    path: Assets/Scenes/KHJScene.unity
-    guid: c921819c99c7d7745a806b93daca1acb
+    path: Assets/Scenes/KKJScene.unity
+    guid: 978ee3c12db4e2840a13bb8f9883a7ea
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 207b95abf0baa7b4a8122ed6dd33a627, type: 2}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 52591f59709b44a448dcde05b40e84d1, type: 2}
