@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 
 public class Ball : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class Ball : MonoBehaviour
     private Vector2 startMousePosition;
     private Vector2 endMousePosition;
 
+    private bool isCreateBall = false; //공 생성 플래그 (공이 생성되어있을 때만 스와이프 처리)
+
     void Start()
     {
         InitializePool(); // 오브젝트 풀 초기화
@@ -41,33 +44,67 @@ public class Ball : MonoBehaviour
 
     void Update()
     {
-        // PC 마우스 입력 처리
-        if (Input.GetMouseButtonDown(0))
-        {
-            startMousePosition = Input.mousePosition;
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            endMousePosition = Input.mousePosition;
-            Vector2 swipeDirection = endMousePosition - startMousePosition;
-            ShootBallWithSwipe(swipeDirection);
-        }
+        HandleInput();
+    }
 
-
-        // 손가락 터치 입력 처리 (모바일)
-        if (Input.touchCount > 0)
+    private void HandleInput()
+    {
+        if(isCreateBall)
         {
-            Touch touch = Input.GetTouch(0);
-
-            if (touch.phase == TouchPhase.Began) // 터치상태가 터치 시작 했을 때
+            // PC 마우스 입력 처리
+            if (Input.GetMouseButtonDown(0))
             {
-                startTouchPosition = touch.position; //터치 위치를 터치 시작 위치로 지정
+                startMousePosition = Input.mousePosition;
             }
-            else if (touch.phase == TouchPhase.Ended)
+            else if (Input.GetMouseButtonUp(0))
             {
-                endTouchPosition = touch.position;
-                Vector2 swipeDirection = endTouchPosition - startTouchPosition;
+                endMousePosition = Input.mousePosition;
+                Vector2 swipeDirection = endMousePosition - startMousePosition;
                 ShootBallWithSwipe(swipeDirection);
+
+
+                // 마우스 버튼을 뗐을 때
+                // 골 성공 여부 확인 코루틴 시작
+                StartCoroutine(CheckGoalAndUseChance());
+            }
+
+            // 손가락 터치 입력 처리 (모바일)
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+
+                if (touch.phase == TouchPhase.Began) // 터치상태가 터치 시작 했을 때
+                {
+                    startTouchPosition = touch.position; //터치 위치를 터치 시작 위치로 지정
+                }
+                else if (touch.phase == TouchPhase.Ended)
+                {
+                    endTouchPosition = touch.position;
+                    Vector2 swipeDirection = endTouchPosition - startTouchPosition;
+                    ShootBallWithSwipe(swipeDirection);
+                }
+            }
+        }
+    }
+
+    private IEnumerator CheckGoalAndUseChance()
+    {
+        yield return new WaitForSeconds(2.5f);
+
+        if (Goal.Instance.isGoal) //골을 넣었다면 기회 차감 X
+        {
+            Goal.Instance.ResetGoal(); // 골 상태 리셋
+        }
+        else
+        {
+            ChanceManager.Instance.UseChance(); //기회 차감
+            if (ChanceManager.Instance.currentChance <= 0)
+            {
+                ChanceManager.Instance.GameOver(); //게임 오버
+            }
+            else
+            {
+                Goal.Instance.ResetGoal(); //골 상태 리셋
             }
         }
     }
@@ -125,6 +162,7 @@ public class Ball : MonoBehaviour
         ballRigid.useGravity = false;
         currentBall.transform.position = shootPoint.position;
         currentBall.transform.rotation = Quaternion.identity;
+        isCreateBall = true;
     }
 
 
@@ -133,6 +171,8 @@ public class Ball : MonoBehaviour
     private void ShootBallWithSwipe(Vector2 swipeDirection)
     {
         if (currentBall == null) return; // 공이 없으면 리턴
+
+        Goal.Instance.ResetGoal(); // 공을 던지기 전 골 상태 초기화
 
         float swipeDistance = swipeDirection.magnitude;
 
@@ -157,6 +197,7 @@ public class Ball : MonoBehaviour
 
         rigid.AddTorque(spin, ForceMode.Impulse);
 
+        isCreateBall = false;
         StartCoroutine(DeactivateBallAfterTime(currentBall, 3f)); //현재 공과 딜레이시간 전달
         currentBall = null;
         StartCoroutine(WaitAndCreateNewBall()); // 1.0f 기다린 다음 새로운 공 생성
@@ -173,7 +214,7 @@ public class Ball : MonoBehaviour
     // 새로운 공 생성을 위한 대기 시간
     private IEnumerator WaitAndCreateNewBall()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(3.0f);
         CreateNewBall();
     }
 }
