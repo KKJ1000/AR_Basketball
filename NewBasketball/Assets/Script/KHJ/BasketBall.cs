@@ -10,6 +10,7 @@ public class BasketBall : MonoBehaviour
     public float minPower = 5f;
     public float verticalMultiplier = 0.5f;
 
+
     public void Shoot(Vector3 direction, float power)
     {
         float clampedPower = Mathf.Clamp(power, minPower, maxPower);

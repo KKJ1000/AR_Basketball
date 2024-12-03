@@ -29,6 +29,7 @@ public class Goal : MonoBehaviour
 
     void Start()
     {
+        scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
         scoreText.text = $"Score : {score}";
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.clip = goalAudioClip;

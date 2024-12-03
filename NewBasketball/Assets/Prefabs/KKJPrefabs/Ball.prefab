@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6033326080267879931}
   - component: {fileID: 5076312181472841969}
   - component: {fileID: 2261360756750672362}
-  - component: {fileID: 6122666687174143071}
   m_Layer: 0
   m_Name: Ball
   m_TagString: BALL
@@ -134,20 +133,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6122666687174143071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7468903196506165712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e74e1c30fc483441a5a51123eb443f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  basketballRigidbody: {fileID: 2261360756750672362}
-  hoop: {fileID: 0}
-  maxPower: 15
-  minPower: 5
-  verticalMultiplier: 0.5
