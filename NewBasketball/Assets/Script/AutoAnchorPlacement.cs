@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -11,8 +12,18 @@ public class AutoAnchorPlacement : MonoBehaviour
     private ARAnchorManager anchorManager; // ARAnchorManager
     private ARPlaneManager planeManager;   // ARPlaneManager
 
+    [SerializeField]
+    [Tooltip("게임 시작 시 활성화되는 가이드 텍스트")]
+    private Text guideText;
+
+    [SerializeField]
+    [Tooltip("바닥을 인식 시킨 후 활성화 되는 가이드 텍스트")]
+    private Text guideText1;
+
     void Start()
     {
+        guideText.gameObject.SetActive(true);   //첫번째 가이드 텍스트 활성화
+        guideText1.gameObject.SetActive(false); //두번째 가이드 텍스트 비활성화
         // ARAnchorManager와 ARPlaneManager 가져오기
         anchorManager = FindObjectOfType<ARAnchorManager>();
         planeManager = FindObjectOfType<ARPlaneManager>();
@@ -41,6 +52,8 @@ public class AutoAnchorPlacement : MonoBehaviour
         foreach (ARPlane plane in args.added)
         {
             CreateAnchorAtPlaneCenter(plane);
+            guideText.gameObject.SetActive(false); //바닥을 인식하면 가이드 텍스트 비활성화
+            guideText.gameObject.SetActive(true);  //바닥을 인식하면 가이드 텍스트1 활성화
         }
     }
 
