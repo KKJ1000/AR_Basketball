@@ -21,12 +21,17 @@ public class AutoAnchorPlacement : MonoBehaviour
     [Tooltip("바닥을 인식 시킨 후 활성화 되는 가이드 텍스트")]
     private Text guideText1;
 
+    [SerializeField]
+    [Tooltip("화면 스와이프 가이드 이미지")]
+    private GameObject swipeGuide;
+
     private float delay = 5.0f; //가이드 텍스트 비활성화 딜레이
 
     void Start()
     {
         guideText.gameObject.SetActive(true);   //첫번째 가이드 텍스트 활성화
         guideText1.gameObject.SetActive(false); //두번째 가이드 텍스트 비활성화
+        swipeGuide.SetActive(false);            //스와이프 가이드 비활성화
         // ARAnchorManager와 ARPlaneManager 가져오기
         anchorManager = FindObjectOfType<ARAnchorManager>();
         planeManager = FindObjectOfType<ARPlaneManager>();
@@ -66,26 +71,17 @@ public class AutoAnchorPlacement : MonoBehaviour
     {
         yield return new WaitForSeconds(delay); //delay 만큼 대기
         guideText1.gameObject.SetActive(false); //두번째 가이드 텍스트 비활성화
+        yield return new WaitForSeconds(2f);    //2초 뒤 스와이프 가이드 활성화
+        swipeGuide.SetActive(true);             //스와이프 가이드 활성화
     }
 
     private void CreateAnchorAtPlaneCenter(ARPlane plane)
     {
         // 평면의 중심 위치 가져오기
         Vector3 planeCenter = plane.center;
-        Vector3 createPos = new Vector3(planeCenter.x,planeCenter.y - 2,planeCenter.z + 5);
+        Vector3 createPos = new Vector3(planeCenter.x, planeCenter.y - 2, planeCenter.z + 5);
         Pose anchorPose = new Pose(createPos, Quaternion.identity);
 
-        // 앵커 생성
-        /*ARAnchor anchor = anchorManager.AddAnchor(anchorPose);*/
-/*        ARAnchor anchor = anchorManager.AddComponent<ARAnchor>();
-*/        
-/*
-        if (anchor != null)
-        {*/
-            // 앵커 위치에 오브젝트 생성
-            Instantiate(objectPrefab, anchorPose.position, anchorPose.rotation);
-            /*Debug.Log("앵커가 생성되었습니다: " + anchor.transform.position);*/
-        //}
-       
+        Instantiate(objectPrefab, anchorPose.position, anchorPose.rotation);
     }
 }

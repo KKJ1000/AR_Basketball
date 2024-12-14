@@ -36,10 +36,24 @@ public class Ball : MonoBehaviour
 
     private bool isCreateBall = false; //공 생성 플래그 (공이 생성되어있을 때만 스와이프 처리)
 
+    [SerializeField]
+    [Tooltip("화면 스와이프 가이드 이미지")]
+    private GameObject swipeGuide;
+
     void Start()
     {
         InitializePool(); // 오브젝트 풀 초기화
         CreateNewBall();  // 첫번째 공 생성
+
+        //Swipe Guide 오브젝트 찾기
+        if (swipeGuide == null)
+        {
+            swipeGuide = GameObject.Find("Swipe Guide"); //오브젝트의 이름으로 찾기
+            if (swipeGuide == null) //찾는데 없으면
+            {
+                Debug.LogError("Swipe Guide오브젝트를 찾을 수 없습니다. 같은 이름의 오브젝트가 있는지 확인하세요");
+            }
+        }
     }
 
     void Update()
@@ -81,6 +95,10 @@ public class Ball : MonoBehaviour
                 {
                     endTouchPosition = touch.position;
                     Vector2 swipeDirection = endTouchPosition - startTouchPosition;
+                    if (swipeGuide != null && swipeGuide.activeSelf)       //스와이프 가이드가 켜져있다면
+                    {
+                        swipeGuide.SetActive(false); //스와이프 가이드 끄기
+                    }
                     ShootBallWithSwipe(swipeDirection);
                 }
             }
