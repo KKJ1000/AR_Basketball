@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,8 @@ public class AutoAnchorPlacement : MonoBehaviour
     [SerializeField]
     [Tooltip("바닥을 인식 시킨 후 활성화 되는 가이드 텍스트")]
     private Text guideText1;
+
+    private float delay = 5.0f; //가이드 텍스트 비활성화 딜레이
 
     void Start()
     {
@@ -54,7 +57,15 @@ public class AutoAnchorPlacement : MonoBehaviour
             CreateAnchorAtPlaneCenter(plane);
             guideText.gameObject.SetActive(false); //바닥을 인식하면 가이드 텍스트 비활성화
             guideText.gameObject.SetActive(true);  //바닥을 인식하면 가이드 텍스트1 활성화
+
+            StartCoroutine(DisableGuideTextAfterDelay(delay));
         }
+    }
+
+    IEnumerator DisableGuideTextAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay); //delay 만큼 대기
+        guideText1.gameObject.SetActive(false); //두번째 가이드 텍스트 비활성화
     }
 
     private void CreateAnchorAtPlaneCenter(ARPlane plane)
