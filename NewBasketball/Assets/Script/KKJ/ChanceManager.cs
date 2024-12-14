@@ -9,12 +9,13 @@ public class ChanceManager : MonoBehaviour
 {
     public static ChanceManager Instance { get; private set; }
     [SerializeField] private GameObject gameOverPanel;  //게임오버 시 활성화될 게임오버 패널 오브젝트
-    [SerializeField] private Text maxScoreText;
+    [SerializeField] private Text highScoreText;
+    [SerializeField] private Text currentScoreText;
     [SerializeField] private Image[] ballIcons; //5개의 농구공 아이콘
     [SerializeField] private Button restartButton;
     [SerializeField] private Button quitButton;
 
-    private int maxScore = 0; //플레이어의 최고 점수
+    private int highScore = 0; //플레이어의 최고 점수
     public int currentChance = 5;    //플레이어의 공 던지기 최대 횟수
    
     void Awake()
@@ -59,8 +60,22 @@ public class ChanceManager : MonoBehaviour
     public void GameOver()
     {
         gameOverPanel.SetActive(true);
-        maxScore = Goal.Instance.score;
-        maxScoreText.text = $"Max Score: {maxScore}";
+
+        int currentScore = Goal.Instance.score; //현재 획득 점수
+        currentScoreText.text = $"현재 점수 : {currentScore}"; //현재 점수 표시
+
+        //최고 점수 갱신 
+        int savedHighScore = PlayerPrefs.GetInt("HighScore", 0); //저장된 최고 점수 불러오기 (기본값 0)
+        if (currentScore > savedHighScore)
+        {
+            savedHighScore = currentScore; //최고 점수 갱신
+            PlayerPrefs.SetInt("HighScore", savedHighScore); //새로운 최고 점수 저장
+            PlayerPrefs.Save(); //저장
+        }
+
+        highScore = savedHighScore;
+        highScoreText.text = $"High Score: {highScore}";
+
         StopAllCoroutines();
     }
 
