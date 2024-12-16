@@ -26,9 +26,12 @@ public class AutoAnchorPlacement : MonoBehaviour
     private GameObject swipeGuide;
 
     private bool isGuideTextShown = false; //가이드 텍스트가 이미 보였는지 체크하는 플래그
+    private bool isFloorDetected = false;  //바닥이 인식됐는지 체크하는 플래그
+
     void Start()
     {
         isGuideTextShown = false;
+        isFloorDetected = false;
         guideText.gameObject.SetActive(true);   //첫번째 가이드 텍스트 활성화
         guideText1.gameObject.SetActive(false); //두번째 가이드 텍스트 비활성화
         swipeGuide.SetActive(false);            //스와이프 가이드 비활성화
@@ -57,6 +60,9 @@ public class AutoAnchorPlacement : MonoBehaviour
 
     private void OnPlanesChanged(ARPlanesChangedEventArgs args)
     {
+        //바닥이 이미 한번 인식되었으면 처리하지 않음
+        if (isFloorDetected) return;
+
         // 새로 감지된 평면만 처리
         foreach (ARPlane plane in args.added)
         {
@@ -72,6 +78,8 @@ public class AutoAnchorPlacement : MonoBehaviour
                 StartCoroutine(DisableGuideTextAndShowSwipeGuide());
             }
 
+            // 바닥이 인식되었다.
+            isFloorDetected = true;
         }
     }
 
