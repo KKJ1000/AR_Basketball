@@ -89,10 +89,10 @@ public class AutoAnchorPlacement : MonoBehaviour
 
     IEnumerator DisableGuideTextAndShowSwipeGuide()
     {
-        //가이드 텍스트1이 활성화됐을 때 2초 뒤에 비활성화 시키고 또 2초뒤 스와이프 가이드 활성화
+        //가이드 텍스트1이 활성화됐을 때 2초 뒤에 비활성화 시키고 또 1.5초뒤 스와이프 가이드 활성화
         yield return new WaitForSeconds(2f);
         guideText1.gameObject.SetActive(false);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
         swipeGuide.SetActive(true);
     }
 
