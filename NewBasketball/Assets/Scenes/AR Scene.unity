@@ -739,7 +739,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2165a6f45d8dbd45b41190b4040d69f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectPrefab: {fileID: 3098579994426412093, guid: ed1cb705b24b5094ca4e20d07b084160, type: 3}
+  objectPrefab: {fileID: 7740830897927526751, guid: db099a848db56b344af9d9ec7e9577a7, type: 3}
+  ballScript: {fileID: 2083726810}
   guideText: {fileID: 219455527}
   guideText1: {fileID: 168348312}
   swipeGuide: {fileID: 1259850003}
@@ -1648,7 +1649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1624145172
 Transform:
   m_ObjectHideFlags: 0
@@ -2522,7 +2523,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Score: 0'
+  m_Text: 'Score : 0'
 --- !u!222 &9158258260297996141
 CanvasRenderer:
   m_ObjectHideFlags: 0

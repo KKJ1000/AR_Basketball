@@ -43,12 +43,13 @@ public class Ball : MonoBehaviour
     void Start()
     {
         InitializePool(); // 오브젝트 풀 초기화
-        CreateNewBall();  // 첫번째 공 생성
+        //CreateNewBall();  // 첫번째 공 생성
     }
 
     void Update()
     {
         HandleInput();
+       
     }
 
     private void HandleInput()
@@ -159,7 +160,7 @@ public class Ball : MonoBehaviour
 
 
     // 가져온 공 위치 지정 (새로운 공 준비)
-    private void CreateNewBall()
+    public void CreateNewBall()
     {
         currentBall = GetBallFromPool(); //ball 받아오기
         Rigidbody ballRigid = currentBall.GetComponent<Rigidbody>();
@@ -225,5 +226,19 @@ public class Ball : MonoBehaviour
     {
         yield return new WaitForSeconds(3.0f);
         CreateNewBall();
+    }
+
+    //슛 포인트 생성 되었을 때 위치 가져오기
+    public void UpdateShootPoint(Vector3 newPosition)
+    {
+        if (shootPoint != null)
+        {
+            shootPoint.position = newPosition;
+            Debug.Log($"Ball 스크립트에서 shootPoint 위치가 설정되었습니다: {shootPoint.position}");
+        }
+        else
+        {
+            Debug.LogWarning("shootPoint가 설정되지 않았습니다.");
+        }
     }
 }

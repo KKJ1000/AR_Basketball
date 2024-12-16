@@ -75,7 +75,7 @@ public class ChanceManager : MonoBehaviour
         }
 
         highScore = savedHighScore;
-        highScoreText.text = $"High Score: {highScore}";
+        highScoreText.text = $"최고 점수 : {highScore}";
 
         StopAllCoroutines();
     }

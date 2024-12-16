@@ -14,6 +14,9 @@ public class AutoAnchorPlacement : MonoBehaviour
     private ARPlaneManager planeManager;   // ARPlaneManager
 
     [SerializeField]
+    private Ball ballScript;
+
+    [SerializeField]
     [Tooltip("게임 시작 시 활성화되는 가이드 텍스트")]
     private Text guideText;
 
@@ -28,6 +31,7 @@ public class AutoAnchorPlacement : MonoBehaviour
     private bool isGuideTextShown = false; //가이드 텍스트가 이미 보였는지 체크하는 플래그
     private bool isFloorDetected = false;  //바닥이 인식됐는지 체크하는 플래그
 
+    private bool isShootPointSet = false; // ShootPoint 위치가 설정되었는지 확인 플래그
     void Start()
     {
         isGuideTextShown = false;
@@ -99,6 +103,30 @@ public class AutoAnchorPlacement : MonoBehaviour
         Vector3 createPos = new Vector3(planeCenter.x, planeCenter.y - 2, planeCenter.z + 5);
         Pose anchorPose = new Pose(createPos, Quaternion.identity);
 
-        Instantiate(objectPrefab, anchorPose.position, anchorPose.rotation);
+        GameObject instantiatedObject = Instantiate(objectPrefab, anchorPose.position, anchorPose.rotation);
+
+        // 자식 오브젝트 가져오기 (예: "ChildObjectName"이라는 이름의 자식 오브젝트)
+        Transform childTransform = instantiatedObject.transform.Find("ShootPoint");
+
+        if (childTransform != null)
+        {
+            Vector3 childWorldPosition = childTransform.position;
+
+            // Ball 스크립트의 shootPoint 업데이트
+            if (ballScript != null)
+            {
+                ballScript.UpdateShootPoint(childWorldPosition);
+                Debug.Log($"ShootPoint 위치가 업데이트되었습니다: {childWorldPosition}");
+
+                // 첫 번째 공 생성
+                ballScript.CreateNewBall();
+
+                isShootPointSet = true; // ShootPoint가 설정되었음을 기록
+            }
+        }
+        else
+        {
+            Debug.LogWarning("ShootPoint 자식 오브젝트를 찾을 수 없습니다.");
+        }
     }
 }
