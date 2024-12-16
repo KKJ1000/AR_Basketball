@@ -300,7 +300,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &219455526
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1451,8 +1451,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverPanel: {fileID: 1217479004}
-  highScoreText: {fileID: 0}
-  currentScoreText: {fileID: 0}
+  highScoreText: {fileID: 484352605}
+  currentScoreText: {fileID: 1185610732}
   ballIcons:
   - {fileID: 1738783413}
   - {fileID: 503067339}
@@ -2367,7 +2367,7 @@ MonoBehaviour:
   maxForce: 7
   maxSpin: 20
   poolSize: 10
-  swipeGuide: {fileID: 0}
+  swipeGuide: {fileID: 1259850003}
 --- !u!4 &2083726811
 Transform:
   m_ObjectHideFlags: 0

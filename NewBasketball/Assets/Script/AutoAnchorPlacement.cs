@@ -25,13 +25,14 @@ public class AutoAnchorPlacement : MonoBehaviour
     [Tooltip("화면 스와이프 가이드 이미지")]
     private GameObject swipeGuide;
 
-    private float delay = 5.0f; //가이드 텍스트 비활성화 딜레이
-
+    private bool isGuideTextShown = false; //가이드 텍스트가 이미 보였는지 체크하는 플래그
     void Start()
     {
+        isGuideTextShown = false;
         guideText.gameObject.SetActive(true);   //첫번째 가이드 텍스트 활성화
         guideText1.gameObject.SetActive(false); //두번째 가이드 텍스트 비활성화
         swipeGuide.SetActive(false);            //스와이프 가이드 비활성화
+
         // ARAnchorManager와 ARPlaneManager 가져오기
         anchorManager = FindObjectOfType<ARAnchorManager>();
         planeManager = FindObjectOfType<ARPlaneManager>();
@@ -60,19 +61,27 @@ public class AutoAnchorPlacement : MonoBehaviour
         foreach (ARPlane plane in args.added)
         {
             CreateAnchorAtPlaneCenter(plane);
-            guideText.gameObject.SetActive(false); //바닥을 인식하면 가이드 텍스트 비활성화
-            guideText.gameObject.SetActive(true);  //바닥을 인식하면 가이드 텍스트1 활성화
+            
+            if (!isGuideTextShown) //가이드 텍스트가 이미 표시되지 않았을 때만 실행
+            {
+                guideText.gameObject.SetActive(false); //바닥을 인식하면 가이드 텍스트 비활성화
 
-            StartCoroutine(DisableGuideTextAfterDelay(delay));
+                guideText1.gameObject.SetActive(true);  //바닥을 인식하면 가이드 텍스트1 활성화
+
+                isGuideTextShown = true; //가이드 텍스트가 표시되었을 때 true로 변경하여 다시는 텍스트가 켜지지 않게 설정.
+                StartCoroutine(DisableGuideTextAndShowSwipeGuide());
+            }
+
         }
     }
 
-    IEnumerator DisableGuideTextAfterDelay(float delay)
+    IEnumerator DisableGuideTextAndShowSwipeGuide()
     {
-        yield return new WaitForSeconds(delay); //delay 만큼 대기
-        guideText1.gameObject.SetActive(false); //두번째 가이드 텍스트 비활성화
-        yield return new WaitForSeconds(2f);    //2초 뒤 스와이프 가이드 활성화
-        swipeGuide.SetActive(true);             //스와이프 가이드 활성화
+        //가이드 텍스트1이 활성화됐을 때 2초 뒤에 비활성화 시키고 또 2초뒤 스와이프 가이드 활성화
+        yield return new WaitForSeconds(2f);
+        guideText1.gameObject.SetActive(false);
+        yield return new WaitForSeconds(2f);
+        swipeGuide.SetActive(true);
     }
 
     private void CreateAnchorAtPlaneCenter(ARPlane plane)

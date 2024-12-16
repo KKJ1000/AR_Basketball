@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.XR.ARFoundation;
 
 //플레이어의 공던지는 기회와 관련된 로직
 public class ChanceManager : MonoBehaviour
@@ -81,6 +82,12 @@ public class ChanceManager : MonoBehaviour
 
     private void OnClickRestartButton()
     {
+        // ARSession 초기화
+        ARSession arSession = FindObjectOfType<ARSession>();
+        if (arSession != null)
+        {
+            arSession.Reset(); //ARSession 초기화
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //현재씬 불러오기
     }
 

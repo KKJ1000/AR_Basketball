@@ -44,16 +44,6 @@ public class Ball : MonoBehaviour
     {
         InitializePool(); // 오브젝트 풀 초기화
         CreateNewBall();  // 첫번째 공 생성
-
-        //Swipe Guide 오브젝트 찾기
-        if (swipeGuide == null)
-        {
-            swipeGuide = GameObject.Find("Swipe Guide"); //오브젝트의 이름으로 찾기
-            if (swipeGuide == null) //찾는데 없으면
-            {
-                Debug.LogError("Swipe Guide오브젝트를 찾을 수 없습니다. 같은 이름의 오브젝트가 있는지 확인하세요");
-            }
-        }
     }
 
     void Update()
@@ -76,7 +66,6 @@ public class Ball : MonoBehaviour
                 Vector2 swipeDirection = endMousePosition - startMousePosition;
                 ShootBallWithSwipe(swipeDirection);
 
-
                 // 마우스 버튼을 뗐을 때
                 // 골 성공 여부 확인 코루틴 시작
                 StartCoroutine(CheckGoalAndUseChance());
@@ -95,10 +84,7 @@ public class Ball : MonoBehaviour
                 {
                     endTouchPosition = touch.position;
                     Vector2 swipeDirection = endTouchPosition - startTouchPosition;
-                    if (swipeGuide != null && swipeGuide.activeSelf)       //스와이프 가이드가 켜져있다면
-                    {
-                        swipeGuide.SetActive(false); //스와이프 가이드 끄기
-                    }
+
                     ShootBallWithSwipe(swipeDirection);
                 }
             }
@@ -189,6 +175,11 @@ public class Ball : MonoBehaviour
     private void ShootBallWithSwipe(Vector2 swipeDirection)
     {
         if (currentBall == null) return; // 공이 없으면 리턴
+
+        if (swipeGuide != null && swipeGuide.activeSelf)       //스와이프 가이드가 켜져있다면
+        {
+            swipeGuide.SetActive(false); //스와이프 가이드 끄기
+        }
 
         Goal.Instance.ResetGoal(); // 공을 던지기 전 골 상태 초기화
 
