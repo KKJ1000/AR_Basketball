@@ -31,7 +31,6 @@ public class AutoAnchorPlacement : MonoBehaviour
     private bool isGuideTextShown = false; //가이드 텍스트가 이미 보였는지 체크하는 플래그
     private bool isFloorDetected = false;  //바닥이 인식됐는지 체크하는 플래그
 
-    private bool isShootPointSet = false; // ShootPoint 위치가 설정되었는지 확인 플래그
     void Start()
     {
         isGuideTextShown = false;
@@ -120,8 +119,6 @@ public class AutoAnchorPlacement : MonoBehaviour
 
                 // 첫 번째 공 생성
                 ballScript.CreateNewBall();
-
-                isShootPointSet = true; // ShootPoint가 설정되었음을 기록
             }
         }
         else
